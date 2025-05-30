@@ -1,8 +1,8 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ShoppingCart, Heart, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 interface Product {
   id: number;
@@ -21,12 +21,32 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
+  const navigate = useNavigate();
+  const [isLiked, setIsLiked] = useState(false);
+  
   const discount = product.originalPrice 
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
+  const handleProductClick = () => {
+    navigate(`/product/${product.id}`);
+  };
+
+  const toggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsLiked(!isLiked);
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToCart(product);
+  };
+
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+    <Card 
+      className="group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+      onClick={handleProductClick}
+    >
       <CardContent className="p-0">
         <div className="relative overflow-hidden">
           <img
@@ -42,9 +62,12 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           <Button
             variant="ghost"
             size="icon"
-            className="absolute top-3 right-3 bg-white/80 hover:bg-white"
+            className={`absolute top-3 right-3 bg-white/80 hover:bg-white ${
+              isLiked ? 'text-red-500' : ''
+            }`}
+            onClick={toggleLike}
           >
-            <Heart className="h-4 w-4" />
+            <Heart className={`h-4 w-4 ${isLiked ? 'fill-current' : ''}`} />
           </Button>
         </div>
         
@@ -71,7 +94,7 @@ const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
           </div>
           
           <Button
-            onClick={() => onAddToCart(product)}
+            onClick={handleAddToCart}
             className="w-full bg-blue-600 hover:bg-blue-700 text-white"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
