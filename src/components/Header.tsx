@@ -3,6 +3,7 @@ import React from 'react';
 import { ShoppingCart, Search, User, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
 
 interface HeaderProps {
   cartItemCount: number;
@@ -18,8 +19,20 @@ const Header = ({ cartItemCount, onCartClick, searchQuery, onSearchChange }: Hea
         <div className="flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-4">
-            <h1 className="text-2xl font-bold text-gray-900">ShopHub</h1>
+            <Link to="/" className="text-2xl font-bold text-gray-900 hover:text-blue-600 transition-colors">
+              ShopHub
+            </Link>
           </div>
+
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              Home
+            </Link>
+            <Link to="/blog" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+              Blog
+            </Link>
+          </nav>
 
           {/* Search Bar */}
           <div className="hidden md:flex flex-1 max-w-md mx-8">
